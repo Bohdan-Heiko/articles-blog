@@ -4,17 +4,19 @@ import mongoose from 'mongoose';
 import cors from 'cors'
 import config from 'config'
 
-import { login, registration } from './controllers/auth.controller.js'
+import { authMe, login, registration } from './controllers/auth.controller.js'
 import { registerValidator } from './validation/auth.validation.js';
+import { checkAuth } from './utils/checkAuth.js';
 const app = express()
 
 app.use(cors())
 app.use(bodyParser.json());
 
 
-
+// routes
 app.post('/auth/login', login)
 app.post('/auth/registration', registerValidator, registration)
+app.get('/auth/me', checkAuth , authMe)
 
 
 

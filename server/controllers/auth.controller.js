@@ -5,14 +5,14 @@ import config from 'config'
 
 import UserModel from '../models/user.js'
 
-
+//login func
 export const login = async (req, res) => {
 
   try {
     const SECRET = config.get('SECRET_KEY')
-    const {email, password} = req.body
+    const { email, password } = req.body
     const user = await UserModel.findOne({ email: email });
-    console.log(user, 'USER');
+
     if (!user) {
       return res.status(404).json({
         message: 'Пользователь не найден',
@@ -31,7 +31,7 @@ export const login = async (req, res) => {
       {
         _id: user._id,
       },
-      'secret123',
+      SECRET,
       {
         expiresIn: '30d',
       },
@@ -50,7 +50,7 @@ export const login = async (req, res) => {
   }
 }
 
-
+//registration
 export const registration = async (req, res) => {
   try {
     const { password, email, fullName, avatarUrl } = req.body
@@ -83,9 +83,31 @@ export const registration = async (req, res) => {
       token,
     });
   } catch (err) {
-    console.log(err);
+    console.log(err, 'Error registration');
     res.status(500).json({
       message: 'Не удалось зарегистрироваться',
     });
   }
 };
+
+// checks if the user is registered
+export const authMe = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.userId)
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Пользователь не найден"
+      })
+    }
+
+    const { ...userData } = user._doc;
+
+    res.json(userData);
+  } catch (error) {
+    console.log(error, "Error authMe");
+    res.status(500).json({
+      message: 'Нет доступа',
+    });
+  }
+}
