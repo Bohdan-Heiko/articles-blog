@@ -1,0 +1,5 @@
+{
+  "mongoUri": "mongodb+srv://gektor:qwerty123@cluster0.yohksfw.mongodb.net/blog?retryWrites=true&w=majority",
+  "PORT": 4444,
+  "SECRET_KEY": "mern mongodb"
+}
